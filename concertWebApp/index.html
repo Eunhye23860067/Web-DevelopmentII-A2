@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Main page</title>
+  </head>
+  <body>
+    <a href="/">Home page</a>
+    <a href="/search">Search fundraisers page</a>
+    <a href="/fundraiser">Fundraiser page</a>
+
+    <img src="flower.png">
+
+    <div class="main-content">
+      <div class="info">
+       <h1>Hello and welcome</h1>
+       <p>We can create something amazing.</p>
+       <p>Let's make a difference together!</p>
+
+       <h2>Active Fundraisers</h2>
+       <ul id="active-fundraisers"></ul>
+    </div>
+
+    <script>
+     //call GET API to get a list
+     fetch("http://localhost:3060/api/concerts")
+     .then(response => response.json())
+     .then(data => {
+
+      const activeFundraisers = document.getElementById('active-fundraisers');
+      
+      if (data.length>0){
+        data.forEach(fundraiser => {
+          const activeList = document.createElement('li');
+          activeList.innerHTML = `
+            <strong>ID</strong> | ${fundraiser.FUNDRAISER_ID}<br>
+            <strong>Organiser</strong> | ${fundraiser.ORGANIZER}<br>
+            <strong>Caption</strong> | ${fundraiser.CAPTION}<br>
+            <strong>Target funding</strong> | $${fundraiser.TARGET_FUNDING}<br>
+            <strong>Current funding</strong> | $${fundraiser.CURRENT_FUNDING}<br>
+            <strong>City</strong> | ${fundraiser.CITY}<br>
+            <strong>Active</strong> | ${fundraiser.ACTIVE ? 'O' : 'X'}<br>
+            <strong>Category</strong> | ${fundraiser.CATEGORY_ID}<br>
+            <hr>
+          `;
+          
+          activeFundraisers.appendChild(activeList);
+        });
+
+      } else {
+        activeFundraisers.textContent = "Not found";
+      }
+    })
+      .catch(error=>{
+           console.error("Error fecthing data",error);
+           activeFundraisers.textContent="Failed to load";
+      });
+
+
+
+    </script>
+  </body>
+</html>

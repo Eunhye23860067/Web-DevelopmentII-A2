@@ -28,6 +28,7 @@ router.get('/categories', (req, res) => {
   })
 })
 
+//search params
 router.get('/search', (req, res) => {
  connection.query("select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.active = true;", (err, records) => {
    if (err) {
@@ -47,3 +48,5 @@ router.get("/:id", (req, res) => {
       }
   })
 })
+
+module.exports = router;

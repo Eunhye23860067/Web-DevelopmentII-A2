@@ -1,16 +1,19 @@
-const express = require('express');
-const mysql = require('mysql2');
-const bodyParser = require('body-parser');
+var express = require('express');  
+var bodyParser = require('body-parser');
+var concertAPI = require('./controllerAPI/api-controller'); 
+const cors = require('cors');
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',  
-  password: 'tlqorgkdl7916@',  
-  database: 'crowdfunding_db' 
-});
+var app = express();
 
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connected!');
-});
+app.use(cors());
 
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/api/concerts', concertAPI);
+
+
+app.listen(3060);
+
+console.log("running on port 3060");
