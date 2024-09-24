@@ -2,41 +2,154 @@
 <html>
   <head>
       <title>Main page</title>
+
+      <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      nav {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        margin: 30px;
+      }
+
+      nav a {
+        margin-left: 20px;
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+      }
+
+      .title {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 39px;
+        font-weight: bold;
+        color: tomato;
+        text-align: center; 
+        position: fixed;    
+        top: 10px;            
+        left: 50%;     
+        transform: translateX(-50%);    
+      }
+
+      .background{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: -1;
+        background-image: url('flower.png');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        text-align: center;
+        margin-bottom: 50px;
+        }
+
+      .info h1 {
+        font-size: 80px;
+        margin-bottom: 90px;
+        margin-top: 250px;
+      }
+
+      .info p {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .active-fundraisers {
+        width: 60%;
+        color: black;
+        padding: 20px;
+        margin: 50px auto;
+        text-align: center;
+        }
+
+      .active-fundraisers h2 {
+        text-align: center;
+        font-size: 40px;
+        color: black;
+        margin-bottom: 80px;
+        margin-top: 100px;
+        }
+
+      .fundraiser-details {
+        margin-bottom: 20px;
+        }
+
+      footer {
+        margin-top: 50px;
+        font-size: 18px;
+        background-color: #ddd;
+        padding: 20px 0;
+        text-align: center;
+      }
+    </style>
   </head>
+
   <body>
-    <a href="/">Home page</a>
-    <a href="/search">Search fundraisers page</a>
-    <a href="/fundraiser">Fundraiser page</a>
+    <nav>
+    <a href="/"><span>Home page</span></a>
+    <a href="/search"><span>Search fundraisers page</span></a>
+    <a href="/fundraiser"><span>Fundraiser page</span></a>
+    </nav>
+    
+    <div class="title">CrowdFunding</div>
 
-    <img src="flower.png">
+    <div class="background"></div>
 
-    <div class="main-content">
+    <div class="main">
       <div class="info">
        <h1>Hello and welcome</h1>
-       <p>We can create something amazing.</p>
-       <p>Let's make a difference together!</p>
-
-       <h2>Active Fundraisers</h2>
-       <ul id="active-fundraisers"></ul>
+       <p>Our crowdfunding platform allows people in need of financial support to set clear goals and timelines.</p>
+       <p>You can also choose the project you want and invest transparently.</p>
+       <p>Together, we empower dreams and help bring meaningful ideas to life!</p>
+      </div>
+       <div class="active-fundraisers">
+        <h2>Active Fundraisers</h2>
+        <ul id="active-fundraisers"></ul>
+       </div>
     </div>
+
+    <footer>
+      <strong>Contact Us</strong><p> Email  e.park.11@student.scu.edu.au | Phone  0402123123 | Address  Gold Coast Airport, Bilinga QLD, AUS</p>
+    </footer>
 
     <script>
      //call GET API to get a list
-     fetch("http://localhost:3060/api/concerts")
+     fetch("http://localhost:3060/api/concerts/fundraisers")
      .then(response => response.json())
      .then(data => {
 
-      const activeFundraisers = document.getElementById('active-fundraisers');
-      
+      const activeFundraisers = document.getElementById('active-fundraisers'); 
+
       if (data.length>0){
         data.forEach(fundraiser => {
-          const activeList = document.createElement('li');
+          const activeList = document.createElement('div');
+          activeList.classList.add('fundraiser-details');
           activeList.innerHTML = `
+            <div style="text-shadow: none;">
             <strong>ID</strong> | ${fundraiser.FUNDRAISER_ID}<br>
             <strong>Organiser</strong> | ${fundraiser.ORGANIZER}<br>
             <strong>Caption</strong> | ${fundraiser.CAPTION}<br>
-            <strong>Target funding</strong> | $${fundraiser.TARGET_FUNDING}<br>
-            <strong>Current funding</strong> | $${fundraiser.CURRENT_FUNDING}<br>
+            <strong>Target funding</strong> | $${fundraiser.TARGET_FUNDING} AUD <br>
+            <strong>Current funding</strong> | $${fundraiser.CURRENT_FUNDING} AUD<br>
             <strong>City</strong> | ${fundraiser.CITY}<br>
             <strong>Active</strong> | ${fundraiser.ACTIVE ? 'O' : 'X'}<br>
             <strong>Category</strong> | ${fundraiser.CATEGORY_ID}<br>

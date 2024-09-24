@@ -8,7 +8,7 @@ var express = require('express');
 
 var router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/fundraisers', (req, res) => {
   connection.query("select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.active = true;", (err, records) => {
       if (err) {
          console.error("Error while retrieve active fundraisers including category");  
@@ -29,8 +29,14 @@ router.get('/categories', (req, res) => {
 })
 
 //search params
-router.get('/search', (req, res) => {
- connection.query("select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.active = true;", (err, records) => {
+router.get('/search/:multisearch', (req, res) => {
+  let values = req.params.multisearch.split("*");
+  let city = values[0];
+  let organizer = values[1];
+  let category = values[2];
+  console.log("select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.active = true and fundraiser.city like '%" + city + "%' and fundraiser.organizer like '%" + organizer + "%' and category.name like '%" + category + "%'");
+  connection.query("select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.active = true and fundraiser.city like '%" + city + "%' and fundraiser.organizer like '%" + organizer + "%' and category.name like '%" + category + "%'",
+   (err, records) => {
    if (err) {
       console.error("Error while retrieve the data");
     } else {
@@ -39,14 +45,18 @@ router.get('/search', (req, res) => {
   })
 })
 
-router.get("/:id", (req, res) => {
-  connection.query("select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.fundraiser_id=" + req.params.id, (err, records) => {
+
+router.get("/fundraisers/:id", (req, res) => {
+  console.log("select * from fundraiser where FUNDRAISER_ID=$" + req.params.id);
+
+  connection.query(
+    "Sselect * from fundraiser where FUNDRAISER_ID=$" + req.params.id), (err, records, fields) => {
       if (err) {
-        console.error("Error while retrieve details of a fundraiser by ID");
+        console.error("Error while retrieve fundraiser by ID");
       } else {
-        res.send(records);
+        res.json(records); 
       }
-  })
-})
+    }}
+  );
 
 module.exports = router;
