@@ -102,6 +102,7 @@
     </footer>
 
     <script>
+      //call ID using query string
     const params = new URLSearchParams(window.location.search);
     let fundraiserId = params.get('id');
 
@@ -112,6 +113,7 @@
         const detailsDiv = document.getElementById('fundraiser-info');
         
         if (data.length > 0) {
+          //assign the first data to fundraiser
           const fundraiser = data[0]; 
           detailsDiv.innerHTML = `
             <h2>${fundraiser.CAPTION}</h2>
@@ -122,15 +124,17 @@
             <p><strong>Category:</strong> ${fundraiser.name}</p>
             <button class="donate-button" onclick="donate()">Donate</button>
           `;
-        } else {
+        } //if there is no data what you searched
+         else {
           detailsDiv.innerHTML = "Fundraiser not found.";
         }
-      })
+      }) //if occur error
       .catch(error => {
         console.error("Error fetching fundraiser details:", error);
-        document.getElementById('fundraiser-info').textContent = "Failed to load fundraiser details.";
+        document.getElementById('fundraiser-info').textContent = "Failed to load fundraiser details";
       });
-
+ 
+    //output message when you click button
     function donate() {
       alert("This feature is under construction");
     }

@@ -158,10 +158,12 @@
 
     <script>
       function searchFundraisers() {
+        //call the values and save variables
         const city = document.getElementById('city').value;
         const organizer = document.getElementById('organizer').value;
         const category = document.getElementById('category').value;
 
+        //combine one strings 
         let searchParams = `${city}*${organizer}*${category}`; 
 
         // call GET API fundraisers details
@@ -184,16 +186,18 @@
                   `;
                   dataDiv.appendChild(newP);
               });
+              //if there is no data what you searched
             } else {
               dataDiv.innerHTML = '<div class="error">No fundraisers are found</div>';
             }
-          })
+          })//if occur error
           .catch(error => {
             console.error("Error fetching data", error);
             document.getElementById('data').textContent = "Failed to load data";
           });
       }
 
+      //clear all data
       function clearCheckboxes() {
         document.getElementById('city').value = "";
         document.getElementById('organizer').value = "";

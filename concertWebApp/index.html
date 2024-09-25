@@ -156,11 +156,11 @@
           
           activeFundraisers.appendChild(activeData);
         });
-
+         //if there is no data what you searched
       } else {
         activeFundraisers.textContent = "Not found";
       }
-    })
+    })  //if occur error
       .catch(error=>{
            console.error("Error fecthing data",error);
            document.getElementById('activeFundraisers').textContent="Failed to load data";
