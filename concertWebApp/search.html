@@ -4,12 +4,11 @@
       <title>Search fundraisers page</title>
       <style>
         .error { color: red; font-weight: bold; }
-
-      body {
+        body {
+        background-color: #f4f4f4;
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #f4f4f4;
       }
 
       nav {
@@ -20,18 +19,17 @@
       }
 
       nav a {
-        margin-left: 20px;
-        text-decoration: none;
         color: #333;
         font-size: 18px;
+        margin-left: 20px;
+        text-decoration: none;
       }
 
       .title {
+        color: tomato;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 39px;
         font-weight: bold;
-        color: tomato;
-        text-align: center; 
         position: fixed;    
         top: 10px;            
         left: 50%;     
@@ -51,21 +49,22 @@
         background-position: center;
       }
 
+
       .main{
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
         min-height: 100vh;  
         }
 
       .info h1 {
+        color: white;
         font-size: 80px;
         margin-top: 100px;
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        text-align: center;
         margin-bottom: 100px;
+        text-align: center;
+        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
       }
 
       .search-here {
@@ -75,48 +74,48 @@
       }
 
       .button{
-        margin-top: 20px;
-        margin-bottom: 50px;
         display: flex;
         justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 50px;
       }
 
       .button input {
-      padding: 5px 10px;
-      font-size: 18px;
-      margin-right: 50px;
-      margin-left: 50px;
+       font-size: 18px;
+       padding: 5px 10px;
+       margin-right: 50px;
+       margin-left: 50px;
       }
 
-      .fundraiser-details {
+      .fundraiser-info {
         color: black;
+        text-align: left;
         margin-bottom: 50px;
         padding: 30px;
-        border: 1px solid #ccc;
         border-radius: 10px;
-        text-align: left;
+        border: 1px solid #ccc;
       }
-      .fundraiser-details p {
+      .fundraiser-info p {
           margin: 15px 0; 
         }
 
-      .fundraiser-details button {
-        margin-top: 10px;
-        padding: 8px 16px;
-        font-size: 16px;
-        margin: 15px auto;
-        display: flex;
+      .fundraiser-info button {
         color: peru;
         background-color: white;
+        font-size: 16px;
+        margin-top: 10px;
+        padding: 8px 16px;
+        margin: 15px auto;
+        display: flex;
         border: 3px;
       }
 
       footer {
+        background-color: #ddd;
+        text-align: center;
         margin-top: 50px;
         font-size: 18px;
-        background-color: #ddd;
         padding: 20px 0;
-        text-align: center;
       }
       </style>
   </head>
@@ -124,7 +123,6 @@
     <nav>
     <a href="/"><span>Home page</span></a>
     <a href="/search"><span>Search fundraisers page</span></a>
-    <a href="/fundraiser"><span>Fundraiser page</span></a>
     </nav>
     <div class="title">CrowdFunding</div>
 
@@ -160,12 +158,13 @@
 
     <script>
       function searchFundraisers() {
-        const organizer = document.getElementById('organizer').value;
         const city = document.getElementById('city').value;
+        const organizer = document.getElementById('organizer').value;
         const category = document.getElementById('category').value;
 
-        let searchParams = city + "*" + organizer + "*" + category; 
-        
+        let searchParams = `${city}*${organizer}*${category}`; 
+
+        // call GET API fundraisers details
         fetch(`http://localhost:3060/api/concerts/search/${searchParams}`)
           .then(response => response.json())
           .then(data => {
@@ -175,13 +174,13 @@
             if (data.length > 0) {
               data.forEach(fundraiser => {
                   const newP = document.createElement("div");
-                  newP.classList.add('fundraiser-details');
+                  newP.classList.add('fundraiser-info');
                   newP.innerHTML = `
                   <p><strong>Organizer:</strong> ${fundraiser.ORGANIZER}</p>
                   <p><strong>Caption:</strong> ${fundraiser.CAPTION}</p>
                   <p><strong>City:</strong> ${fundraiser.CITY}</p>
                   <p><strong>Category:</strong> ${fundraiser.name}</p>
-                  <button onclick="location.href='/fundraiser/${fundraiser.FUNDRAISER_ID}'">See Details</button>
+                  <button onclick="location.href='/fundraisers?id=${fundraiser.FUNDRAISER_ID}'">See Details</button>
                   `;
                   dataDiv.appendChild(newP);
               });
@@ -196,8 +195,8 @@
       }
 
       function clearCheckboxes() {
-        document.getElementById('organizer').value = "";
         document.getElementById('city').value = "";
+        document.getElementById('organizer').value = "";
         document.getElementById('category').value = "";
         document.getElementById('data').innerHTML = "";
        }

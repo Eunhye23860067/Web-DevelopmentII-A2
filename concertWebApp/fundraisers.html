@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Fundraiser page</title>
+
+     <style>
+      body {
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        margin: 30px;
+      }
+
+      nav a {
+        color: #333;
+        font-size: 18px;
+        margin-left: 20px;
+        text-decoration: none;
+      }
+
+      .title {
+        color: tomato;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 39px;
+        font-weight: bold;
+        position: fixed;    
+        top: 10px;            
+        left: 50%;     
+        transform: translateX(-50%);    
+      }
+
+      .background{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: -1;
+        background-image: url('flower.png');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+      }
+
+      .fundraiser-info {
+        width: 50%;
+        margin: 150px auto;
+        border-radius: 10px;
+        padding: 55px;
+        border: 1px solid #ccc;
+       }
+
+      .fundraiser-info h2 {
+        font-size: 30px;
+ 
+        margin-bottom: 30px;
+      }
+
+      .donate-button {
+        color: white;
+        text-align: left;
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 20px;
+        background-color: #c5775aea;
+        border-radius: 5px;
+        border: 3px solid sienna;
+      }
+
+      footer {
+        background-color: #ddd;
+        text-align: center;
+        margin-top: 50px;
+        font-size: 18px;
+        padding: 20px 0;
+      }
+
+      </style>
+  </head>
+
+  <body>
+    <nav>
+      <a href="/"><span>Home page</span></a>
+      <a href="/search"><span>Search fundraisers page</span></a>
+    </nav>
+
+    <div class="title">CrowdFunding</div>
+
+    <div class="background"></div>
+
+    <div id="fundraiser-info" class="fundraiser-info"></div>
+
+    <footer>
+      <strong>Contact Us</strong><p>Email: e.park.11@student.scu.edu.au | Phone: 0402123123 | Address: Gold Coast Airport, Bilinga QLD, AUS</p>
+    </footer>
+
+    <script>
+    const params = new URLSearchParams(window.location.search);
+    let fundraiserId = params.get('id');
+
+    // call GET API fundraiser details by ID
+    fetch(`http://localhost:3060/api/concerts/fundraisers/${fundraiserId}`)
+      .then(response => response.json())
+      .then(data => {
+        const detailsDiv = document.getElementById('fundraiser-info');
+        
+        if (data.length > 0) {
+          const fundraiser = data[0]; 
+          detailsDiv.innerHTML = `
+            <h2>${fundraiser.CAPTION}</h2>
+            <p><strong>Organizer:</strong> ${fundraiser.ORGANIZER}</p>
+            <p><strong>Target Funding:</strong> $${fundraiser.TARGET_FUNDING}</p>
+            <p><strong>Current Funding:</strong> $${fundraiser.CURRENT_FUNDING}</p>
+            <p><strong>City:</strong> ${fundraiser.CITY}</p>
+            <p><strong>Category:</strong> ${fundraiser.name}</p>
+            <button class="donate-button" onclick="donate()">Donate</button>
+          `;
+        } else {
+          detailsDiv.innerHTML = "Fundraiser not found.";
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching fundraiser details:", error);
+        document.getElementById('fundraiser-info').textContent = "Failed to load fundraiser details.";
+      });
+
+    function donate() {
+      alert("This feature is under construction");
+    }
+
+    </script>
+
+  </body>
+</html>
