@@ -51,7 +51,7 @@
 
       .fundraiser-info {
         width: 50%;
-        margin: 150px auto;
+        margin: 150px auto 20px;
         border-radius: 10px;
         padding: 55px;
         border: 1px solid #ccc;
@@ -72,6 +72,50 @@
         background-color: #c5775aea;
         border-radius: 5px;
         border: 3px solid sienna;
+      }
+
+      .donation-data {
+        width: 50%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+      }
+
+      .donation-info {
+        width: 50%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .donation-info:last-child {
+        border-bottom: none;
+      }
+
+      .donation-info p {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .donation-info .amount {
+        float: right;
+        color: #000000;
+      }
+
+      .donation-info .giver {
+        font-weight: bold;
+        color: #b5620f;
+        font-size: 19px;
+      }
+
+      .donation-title {
+        margin-top: 10px; 
+        text-align: center;
+        font-size: 24px;
+        color: #000000;
       }
 
       footer {
@@ -96,6 +140,15 @@
     <div class="background"></div>
 
     <div id="fundraiser-info" class="fundraiser-info"></div>
+
+    <div class="donation-title">
+      <h3>Donation List</h3>
+    </div>
+
+    <div id="donateList" class="donations-data"></div> 
+    
+  
+
 
     <footer>
       <strong>Contact Us</strong><p>Email: e.park.11@student.scu.edu.au | Phone: 0402123123 | Address: Gold Coast Airport, Bilinga QLD, AUS</p>
@@ -122,7 +175,7 @@
             <p><strong>Current Funding:</strong> $${fundraiser.CURRENT_FUNDING}</p>
             <p><strong>City:</strong> ${fundraiser.CITY}</p>
             <p><strong>Category:</strong> ${fundraiser.name}</p>
-            <button class="donate-button" onclick="donate()">Donate</button>
+            <button class="donate-button" onclick="location.href='/donation?id=${fundraiserId}'">Donate</button>
           `;
         } //if there is no data what you searched
          else {
@@ -134,11 +187,29 @@
         document.getElementById('fundraiser-info').textContent = "Failed to load fundraiser details";
       });
  
-    //output message when you click button
-    function donate() {
-      alert("This feature is under construction");
-    }
+      fetch(`http://localhost:3060/api/concerts/donations/${fundraiserId}`)
+        .then(response => response.json())
+        .then(donations => {
+          const donationsDiv = document.getElementById('donateList');
 
+          if (donations.length > 0) {
+            donations.forEach(donation => {
+              const donationData = document.createElement('div');
+              donationData.classList.add('donation-info'); 
+              donationData.innerHTML = `
+                <p>Date: ${new Date(donation.DATE).toLocaleDateString()}</p> 
+                <p><span class="giver">${donation.GIVER}</span><span class="amount"> $${donation.AMOUNT}</span></p>
+              `;
+              donationsDiv.appendChild(donationData); 
+            });
+          } else {
+            donationsDiv.innerHTML = "No donations found.";
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching donations:", error);
+          document.getElementById('donateList').textContent = "Failed to load donations";
+        });
     </script>
 
   </body>

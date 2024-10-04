@@ -46,15 +46,26 @@ router.get('/search/:multisearch', (req, res) => {
 })
 
 
-router.get("/fundraisers/:id", (req, res) => {
-  console.log("select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.fundraiser_id = ${req.params.id}");
+router.get('/fundraisers/:id', (req, res) => {
+  console.log(`select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.fundraiser_id = ${req.params.id}`);
   connection.query("select fundraiser.*, category.name from fundraiser inner join category on fundraiser.category_id = category.category_id where fundraiser.fundraiser_id = ?", [req.params.id], (err, records, fields) => {
-  if (err) {
-        console.error("Error while retrieve fundraiser by ID");
-      } else {
-        res.json(records); 
-      }
-    });
+    if (err) {
+      console.error("Error while retrieving fundraiser by ID");
+    } else {
+      res.json(records); 
+    }
   });
+});
+
+router.get('/donations/:id', (req, res) => {
+  console.log(`select * from donation where fundraiser_id = ${req.params.id}`);
+  connection.query("select * from donation where fundraiser_id = ?", [req.params.id], (err, records, fields) => {
+    if (err) {
+      console.error("Error while retrieving donations");
+    } else {
+      res.json(records);
+    }
+  });
+});
 
 module.exports = router;
