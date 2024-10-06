@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Donation Page</title>
+    <style>
+      body {
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        margin: 30px;
+      }
+
+      nav a {
+        color: #333;
+        font-size: 18px;
+        margin-left: 20px;
+        text-decoration: none;
+      }
+
+      .title {
+        color: tomato;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 39px;
+        font-weight: bold;
+        position: fixed;    
+        top: 10px;            
+        left: 50%;     
+        transform: translateX(-50%);    
+      }
+
+      .background{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: -1;
+        background-image: url('flower.png');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+      }
+
+      .donation-details{
+        background-color: white;
+        width: 50%;
+        margin: 150px auto;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .fundraiser-details{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+      }
+
+      .fundraiser-details span{
+        color: #d37c35;
+        font-size: 30px;
+        font-weight: bold;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-size: 16px;
+     }
+     
+     .support{
+      font-size: 14px;
+      color: #000000;
+     }
+
+      input[type="number"],
+      input[type="text"] {
+        font-size: 16px;
+        width: 95%;
+        padding: 10px 10px ;
+        border-radius: 5px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .submit-button {
+       background-color: #b36d28;
+       color: white;
+       width: 40%;
+       padding: 15px;
+       border: none;
+       border-radius: 5px;
+       font-size: 18px;
+       display: block;
+       margin: 20px auto; 
+      }
+
+      footer {
+        background-color: #ddd;
+        text-align: center;
+        margin-top: 50px;
+        font-size: 18px;
+        padding: 20px 0;
+      }
+
+
+    </style>
+  </head>
+  
+  <body>
+    <div class="title">CrowdFunding</div>
+
+    <div class="background"></div>
+
+
+    <div class="donation-details">
+      <p class="support">You are supporting to <span id="fundraiser-name"></span></p>
+
+      <div class="fundraiser-details">
+        <span id="caption"></span>
+        <span id="organizer"></span>
+     </div>
+  
+      <form id="donation-input">
+          <div class="form-group">
+          <label for="amount">Donation Amount (AUD)</label>
+          <input type="number" id="amount" name="amount" min="5" required>
+          </div>
+
+          <div class="form-group">
+          <label for="giver">Name</label>
+          <input type="text" id="giver" name="giver" required>
+          </div>
+  
+          <button type="submit" class="submit-button">Submit my donation</button>
+      </form>
+  </div>
+
+  <script>
+    //call ID using query string
+    const params = new URLSearchParams(window.location.search);
+    const fundraiserId = params.get('id');
+ 
+    //call fundraiser data by ID
+    fetch(`http://localhost:3060/api/concerts/fundraisers/${fundraiserId}`)
+      .then(res => res.json())
+      .then(data => {
+         if (data.length > 0) {
+           const fundraiser = data[0];
+           document.getElementById('organizer').textContent = fundraiser.ORGANIZER;
+           document.getElementById('caption').textContent = fundraiser.CAPTION;
+          }
+       })
+       .catch(error => {
+           console.error('Error fetching fundraiser details:', error);
+       });
+
+       document.getElementById("donation-input").addEventListener("submit", function (event) {
+          //access input value
+          const giver = document.getElementById('giver').value;
+          const amount = document.getElementById('amount').value;
+           
+         //send donations data to POST
+         fetch('http://localhost:3060/api/concerts/donations', {
+                method: 'POST',
+                //converting to JSON String
+                body: JSON.stringify({
+
+                   AMOUNT: amount,
+                   GIVER: giver,
+                   FUNDRAISER_ID: fundraiserId
+                })
+            })
+            .then(res => {
+                if (res.ok) {
+                  const caption = document.getElementById("caption").textContent;
+                  alert("Thank you for donating to ${caption}");
+                 
+                  //redirects the user to the fundraiser page
+                  window.location.href = `/fundraisers?id=${fundraiserId}`;
+                } else {
+                    return res.json();
+                }
+            })
+            .catch(error => {
+                console.error("Error submitting donation details:", error);
+            });
+        });
+</script>
+
+</body>
+</html>
