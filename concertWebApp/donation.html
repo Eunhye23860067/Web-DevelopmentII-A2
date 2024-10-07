@@ -150,7 +150,7 @@
     const fundraiserId = params.get('id');
  
     //call fundraiser data by ID
-    fetch(`http://localhost:3060/api/concerts/fundraisers/${fundraiserId}`)
+    fetch(`http://localhost:3000/api/crowdfunding/${fundraiserId}`)
       .then(res => res.json())
       .then(data => {
          if (data.length > 0) {
@@ -169,7 +169,7 @@
           const amount = document.getElementById('amount').value;
            
          //send donations data to POST
-         fetch('http://localhost:3060/api/concerts/donations', {
+         fetch('http://localhost:3000/api/crowdfunding/donate', {
                 method: 'POST',
                 //converting to JSON String
                 body: JSON.stringify({

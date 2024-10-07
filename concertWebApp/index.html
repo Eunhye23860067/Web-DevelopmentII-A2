@@ -131,7 +131,7 @@
 
     <script>
      //call GET API to get a list
-     fetch("http://localhost:3060/api/concerts/fundraisers")
+     fetch("http://localhost:3000/api/crowdfunding")
      .then(response => response.json())
      .then(data => {
 
@@ -149,8 +149,8 @@
             <strong>Target funding</strong> | $${fundraiser.TARGET_FUNDING} AUD <br>
             <strong>Current funding</strong> | $${fundraiser.CURRENT_FUNDING} AUD<br>
             <strong>City</strong> | ${fundraiser.CITY}<br>
-            <strong>Active</strong> | ${fundraiser.ACTIVE ? 'O' : 'X'}<br>
-            <strong>Category</strong> | ${fundraiser.CATEGORY_ID}<br>
+            <strong>Active</strong> | ${fundraiser.ACTIVE ? '1' : '0'}<br>
+            <strong>Category</strong> | ${fundraiser.CATEGORY}<br>
             <hr>
           `;
           
@@ -161,11 +161,10 @@
         activeFundraisers.textContent = "Not found";
       }
     })  //if occur error
-      .catch(error=>{
-           console.error("Error fecthing data",error);
-           document.getElementById('activeFundraisers').textContent="Failed to load data";
-      });
-
+      .catch(error => {
+        console.error("Error fetching data", error);
+        document.getElementById('active-fundraisers').textContent = "Failed to load data"; 
+    });
 
 
     </script>

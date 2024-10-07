@@ -7,6 +7,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
+
 //static files
 app.use(express.static(__dirname));
 
@@ -32,3 +33,6 @@ app.get('/donation', (req, res) => {
 app.listen(8080,() => {
     console.log("Server running 8080");
 });
+
+const cors = require('cors');
+app.use(cors());

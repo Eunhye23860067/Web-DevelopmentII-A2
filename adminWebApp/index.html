@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+    <title>Home page - admin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="title">CrowdFunding Admin</div>
+
+    <div class="background"></div>
+
+    <div class="main">
+    <h2>List of Fundraisers</h2>
+
+    <div id="fundraiserList"></div> 
+
+    <h2>Add New Fundraiser</h2>
+    <form id="addNewFundraiserForm">
+        <label>Organizer </label><input type="text" id="newOrganizer" required><br>
+        <label>Caption </label><input type="text" id="newCaption" required><br>
+        <label>Target Funding </label><input type="number" id="newTarget" required><br>
+        <label>Current funding </label><input type="number" id="newCurrent" required><br>
+        <label>City </label><input type="text" id="newCity" required><br>
+        <label>Category </label><input type="text" id="newCategory" required><br>
+        <button type="button" onclick="addFundraiser()">Save</button>
+    </form>
+
+    <h2>Update Fundraiser</h2>
+    <form id="updateFundraiserForm">
+        <form>
+            <input type="hidden" id="updateId">
+            <label>Organizer</label><input type="text" id="updateOrganizer"><br>
+            <label>Caption </label><input type="text" id="updateCaption"><br>
+            <label>Target Funding </label><input type="number" id="updateTarget"><br>
+            <label>Current Funding </label><input type="number" id="updateCurrent"><br>
+            <label>City </label><input type="text" id="updateCity"><br>
+            <label>Category </label><input type="text" id="updateCategory"><br>
+            <button type="button" onclick="updateFundraiser()">Update</button>
+        </form>
+    </div>
+
+    <script src="app.js"></script> 
+</body>
+</html>

@@ -115,7 +115,7 @@
         margin-top: 10px; 
         text-align: center;
         font-size: 24px;
-        color: #000000;
+        color: #333;
       }
 
       footer {
@@ -160,7 +160,7 @@
     let fundraiserId = params.get('id');
 
     // call GET API fundraiser details by ID
-    fetch(`http://localhost:3060/api/concerts/fundraisers/${fundraiserId}`)
+    fetch(`http://localhost:3000/api/crowdfunding/${fundraiserId}`)
       .then(response => response.json())
       .then(data => {
         const detailsDiv = document.getElementById('fundraiser-info');
@@ -174,7 +174,7 @@
             <p><strong>Target Funding:</strong> $${fundraiser.TARGET_FUNDING}</p>
             <p><strong>Current Funding:</strong> $${fundraiser.CURRENT_FUNDING}</p>
             <p><strong>City:</strong> ${fundraiser.CITY}</p>
-            <p><strong>Category:</strong> ${fundraiser.name}</p>
+            <p><strong>Category:</strong> ${fundraiser.CATEGORY}</p>
             <button class="donate-button" onclick="location.href='/donation?id=${fundraiserId}'">Donate</button>
           `;
         } //if there is no data what you searched
@@ -187,7 +187,7 @@
         document.getElementById('fundraiser-info').textContent = "Failed to load fundraiser details";
       });
  
-      fetch(`http://localhost:3060/api/concerts/donations/${fundraiserId}`)
+      fetch(`http://localhost:3000/api/crowdfunding/donations/${fundraiserId}`)
         .then(response => response.json())
         .then(donations => {
           const donationsDiv = document.getElementById('donateList');
